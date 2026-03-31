@@ -18,8 +18,10 @@ I made this code for personal use. Please do not use it to DoS the BGE website, 
 
 `PyBGE` needs you to provide, in plaintext, the email and password of your BGE account, so that it can log in to it and do its job. It is a **bad idea** to put your email and password into some random Python code you got off GitHub.
 
-If you have MFA enabled on your BGE account (*and you should)*, then `PyBGE` will also ask you to input the MFA code that BGE sends you when it tries to log in to your account. **This is a TERRIBLE idea**. You absolutely should not type your MFA code into some random Python code you got off GitHub! Why would you even do that? I could be a terrible person with nefarious plans! For heaven's sake, I chose to spend part of my limited time on this Earth writing code to scrape energy usage data off the website of of utility company, so I clearly don't have good judgement! You absolutely should not trust my software with your MFA code.
+If you have MFA enabled on your BGE account (*and you should)*, then `PyBGE` will also ask you to input the MFA code that BGE sends you when it tries to log in to your account. **This is a TERRIBLE idea**. You absolutely *should not* type your MFA code into some random Python code you got off GitHub! Why would you even do that? I could be a terrible person with nefarious plans! For heaven's sake, I chose to spend part of my limited time on this Earth writing code to scrape energy usage data off the website of a utility company - I clearly don't have good judgement! You absolutely should not trust my software with your MFA code.
 
 I wrote `pyBGE` myself; however it was very much tailored to my own setup. I therefore used an LLM to refactor it into the more generic package structure you see here. I have a gaming PC I use regularly, so I judged that my net "compute and energy usage for silly purposes" budget was not meaningfully impacted by this use of an LLM.
+
+## Installation
 
 ## Quick Guide to Using PyBGE
