@@ -1,0 +1,57 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pybge"
+version = "0.2.0"
+description = "Scrape, parse, collate, correlate and forecast BGE hourly energy-usage data."
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    # Numerical / data
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "scipy>=1.11",
+
+    # Image handling & OCR
+    "Pillow>=10.0",
+    "pytesseract>=0.3.10",
+
+    # Web scraping
+    "selenium>=4.15",
+    "undetected-chromedriver>=3.5",
+
+    # Weather data
+    "meteostat>=1.6",
+
+    # Weather forecasting (not on PyPI; install from GitHub)
+    "openmeteopy @ git+https://github.com/m0rp43us/openmeteopy",
+
+    # Machine learning
+    "scikit-learn>=1.4",
+    "quantile-forest>=1.2",
+
+    # Model serialisation
+    "hickle>=4.0",
+
+    # Plotting
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
+    "cmocean>=3.0",
+    "cmasher>=1.6",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7",
+    "black",
+    "ruff",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["pybge"]
