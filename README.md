@@ -24,4 +24,6 @@ I wrote `pyBGE` myself; however it was very much tailored to my own setup. I the
 
 ## Installation & Requirements
 
+`PyBGE` can be installed by downloading this repo, navigating in the terminal to the directory that contains `pyproject.toml`, and runnng the command `pip install .'
+
 ## Quick Guide to Using PyBGE
