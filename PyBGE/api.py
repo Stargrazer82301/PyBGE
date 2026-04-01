@@ -29,7 +29,6 @@ def run(
     tesseract_cmd: Optional[str] = None,
     date_start: Optional[datetime.date] = None,
     date_end: Optional[datetime.date] = None,
-    screenshots_subdir: str = "screenshots",
     dollars_per_kwhr: Optional[float] = None,
     dollars_per_therm: Optional[float] = None,
     freedom_units: bool = False,
@@ -85,10 +84,7 @@ def run(
         Earliest date to process.  ``None`` = auto-detect from existing
         output files, or two years before ``date_end`` if no files exist.
     date_end:
-        Latest date to process.  ``None`` = today.
-    screenshots_subdir:
-        Sub-directory inside ``path`` for PNG screenshots.
-        Defaults to ``"screenshots"``.
+        Latest date to process.  ``None`` = three days before current date.
     dollars_per_kwhr:
         Electricity cost per kWh.  When both this and ``dollars_per_therm``
         are provided:
@@ -107,11 +103,11 @@ def run(
     if not os.path.isdir(path):
         raise FileNotFoundError(f"data directory not found: {path!r}")
 
-    img_dir = os.path.join(path, screenshots_subdir)
+    img_dir = os.path.join(path, 'screenshots')
     os.makedirs(img_dir, exist_ok=True)
 
     if date_end is None:
-        date_end = datetime.date.today()
+        date_end = datetime.date.today() - datetime.timedelta(days=3)
 
     if date_start is None:
         collated_path = os.path.join(path, "BGE_Collated.csv.gz")

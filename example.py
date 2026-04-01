@@ -19,7 +19,7 @@ pybge.run(output_dir,
 
 # Function to train model to learn usage patterns based on weather
 pybge.correlate('output_dir',
-                predict_days = 10)
+                predict_days = 120)
 
 # Function to use the model trained above, and forecasts, to predict usage
 pybge.forecast(output_dir,
