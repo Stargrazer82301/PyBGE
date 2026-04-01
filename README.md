@@ -77,7 +77,9 @@ pybge.forecast(output_dir,
 
 On first run of `pybge.run()` the output directory must exist, but can be empty — PyBGE will create the `screenshots/` sub-directory automatically.  After the first run the two output data files `BGE_Usage.csv.gz` and `BGE_Collated.csv.gz` will be present. On subsequent runs of `pybge.run()` to the same output directory, but with a different date range, the new dates will be appended to the existing output data files.
 
-## `pybge.run()` API
+## `pybge.run()` Usage
+
+The docstring for `pybge.run()` contains full explaination of the input parameters; they are summarised here for cenvenience:
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -88,14 +90,18 @@ On first run of `pybge.run()` the output directory must exist, but can be empty 
 | `lat` | `float` | `39.3328` | Latitude (degrees) for Meteostat weather lookup |
 | `lon` | `float` | `-76.6327` | Longitude (degrees) for Meteostat weather lookup |
 | `alt` | `float` | `68` | Altitude (metres) for Meteostat weather lookup |
-| `tesseract_cmd` | `str \| None` | `None` | Absolute path to `tesseract` binary; `None` = use `PATH` |
+| `tesseract_cmd` | `str \| None` | `None` | Absolute path to `tesseract`; if `None`, `PATH` is used |
 | `date_start` | `datetime.date \| None` | `None` | Earliest date to process; auto-detected from existing data when `None` (auto-detect does not work for first run) |
 | `date_end` | `datetime.date \| None` | `None` | Latest date to process; defaults to three days before current date |
-| `screenshots_subdir` | `str` | `"screenshots"` | Sub-directory inside `path` for PNG screenshots |
+| `dollars_per_kwhr` | `str` | `None` | Electricity cost per kWh |
+| `dollars_per_therm` | `str` | `None` | Sub-directory inside `path` for PNG screenshots |
+| `freedom_units` | `bool` | `False` | Sub-directory inside `path` for PNG screenshots |
 
 Latitude, longitute, and altitude default values for weather lookup correspond approxmately to the Royal Farms headquarters. This seemed an appropriately *Baltimore*  default location. If you want more-accurate weather for the specific location of your address, you can find the latitude and longitude by, eg, right-clicking on a locaiton on Google maps.
 
 If tesseract is in your path, you don't have to provide a value for the `tesseract_cmd` kwarg. Otherwise, typing `which tesseract` at the terminal (on UNIX systems) will tell you the path to your tesseract installation.
+
+The output data files record the energy usage for your electricity usage in kWh, and gas usage in therms. They also record your combined usage in units of "equivalent kilowatt-hours", or ekWh, by using the approximate equivalency between 
 
 The service agreement UUID is BGE's internal identifier for your account. It is embedded in the URL of your hourly usage page and tells the BGE website which meter/address to show data for. How to find yours:
 
@@ -115,8 +121,15 @@ The service agreement UUID is BGE's internal identifier for your account. It is 
 
        3D2c3beab5-0b88-22eu-918c-0300170a5887
 
+### Output files
 
-## Pipeline overview
+| File | Description |
+|---|---|
+| `BGE_Usage.csv.gz` | Hourly electricity (kWh), gas (therm), and effective kWh |
+| `BGE_Collated.csv.gz` | Usage + Meteostat weather + 24-hour rolling statistics |
+| `screenshots/<date>_<Fuel>.png` | Raw BGE portal screenshots |
+
+### `pybge.run()` Pipeline Overview
 
 `pybge.run()` executes three steps in sequence:
 
@@ -132,10 +145,24 @@ The service agreement UUID is BGE's internal identifier for your account. It is 
    weather (temperature, humidity, precipitation, wind, pressure, cloud cover)
    and computes 24-hour rolling totals/averages.  Writes `BGE_Collated.csv.gz`.
 
-## Output files
+## `pybge.correlate()` Usage
 
-| File | Description |
-|---|---|
-| `BGE_Usage.csv.gz` | Hourly electricity (kWh), gas (therm), and effective kWh |
-| `BGE_Collated.csv.gz` | Usage + Meteostat weather + 24-hour rolling statistics |
-| `screenshots/<date>_<Fuel>.png` | Raw BGE portal screenshots |
+`pybge.correlate()` uses the tabulated outputs of `pybge.run`, and applies one of several possible machine learning models (mostly from `scikit-learn`) to understand the underyling relationship between weather conditions and energy usage. A certain number of the most recent days can be excluded from this modelling, to see if they deviate from the historical relationship.
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `data_dir` | `str` | — | Directory where PyBGE CSV files are stored |
+| `method` | `str` | `"GPR"` | Method to use to for modelling usage vs weather (`"GPR"`, `"linear"`, `"BRR"`, `"ARDR"`, `"Random-Forest"`, `"Quantile-Forest"`, `"Neural-Net"`) |
+| `predict_days` | `int` | `30` | How many days into the past to predict (for comparing to model) |
+| `dollars_per_kwhr` | `float` | `None` | None | Directory where CSV files are stored |
+| `dollars_per_therm` | `float` | `None` | None| Directory where CSV files are stored |
+| `plot_unit` | `str` | `"auto"` | `"ekwh"`, `"dollars"`, or `"auto"` |
+| `freedom_units` | `bool` | `False` | Change temperature units in plots fron Censius to Farenheit |
+
+## `pybge.forecast()` Usage
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `path` | `str` | — | Directory where CSV files are stored |
+
+
