@@ -2,6 +2,8 @@
 
 A small Python package to scrape, parse, and tabulate your hourly energy usage data from the BGE (Baltimore Gas and Electric) website, then do a little analysis with it to understand & predict household energy usage. 
 
+![Example of a PyBGE output plot of average temperature vs energy usage](https://github.com/Stargrazer82301/PyBGE/blob/main/BGE_Correlate_Relation.png)
+
 ## Introduction
 
 I made this code as a little personal project, because we had done some energy efficiency upgrades to our house, and I wanted to understand how much of an impact these were having on our bills. The BGE account website provides very useful hour-by-hour usage plots for electricity and gas. Cool! However, they don't provide a way to download that usage data in bulk.
@@ -149,7 +151,7 @@ The service agreement UUID is BGE's internal identifier for your account. It is 
 
 ## `pybge.correlate()` Usage
 
-`pybge.correlate()` uses the tabulated outputs of `pybge.run`, and applies one of several possible machine learning models (mostly from `scikit-learn`) to understand the underlying relationship between weather conditions and energy usage. A certain number of the most recent days can be excluded from this modelling, to see if they deviate from the historical relationship.
+`pybge.correlate()` uses the tabulated outputs of `pybge.run`, and applies one of several possible machine learning models (mostly from `scikit-learn`) to understand the underlying relationship between weather conditions and energy usage. A certain number of the most recent days can be excluded from this modelling, to see if they deviate from the historical relationship. 
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -162,6 +164,14 @@ The service agreement UUID is BGE's internal identifier for your account. It is 
 | `freedom_units` | `bool` | `False` | Change temperature units in plots fron Censius to Farenheit |
 
 If `dollars_per_kwhr` and `dollars_per_therm` are supplied, then `plot_unit = "auto"` defaults to dollars; otherwise, it defaults to ekWh. If `plot_unit` is set to `"auto"`, then values for `dollars_per_kwhr` and `dollars_per_therm` must be supplied.
+
+### Analysis Plots
+
+`pybge.correlate()` outputs a couple of analysis plots. The first one is a plot of daily average temperature vs energy use; an example of this plot is shown at the top of this readme. Green points are the days used to train the model. Purple points are the X more recent days (as specified by the user) which were excluded from the model training. Point shading indicates date: darker points are more recent. Daily average temperature is *not* the only parameter used to predict energy usage! But it is usually the one with the tightest correlation.
+
+The second analysis plot illustrates the result of the model fitting. It shows the daily energy usage predicted by the model, compared to the actual energy usage, for each day. An example of this plot is shown below. If the points excluded from trainig (the purple points) are offset vs the green points, that indicates that energy usage during the training window was different from the excluded window.
+
+![Example of a PyBGE output plot of predicted energy usage vs actual energy usage](https://github.com/Stargrazer82301/PyBGE/blob/main/BGE_Correlate_Prediction.png)
 
 ## `pybge.forecast()` Usage
 
@@ -180,4 +190,10 @@ If `dollars_per_kwhr` and `dollars_per_therm` are supplied, then `plot_unit = "a
 
 Weather forecast is used for the first 0–5 days into the future; forecast data then tapers with historical weather data over days 5–7; any date more than 7 days in the future is entirely informed by historical weather averages.
 
+### Forecast Plots
 
+`pybge.forecast()` outputs a two plots to illustrate its results. The first plot shows the day-by-day forecast energy usage, colour-coded by expected day average temperature. The second plot shows the relationship between expected day average temperture, and predicted daily energy usage (note that all the weather parameters are used for the usage prediction, not just the average temperature); point shading indicates date, with later dates being shaded darker. Examples of these plots are shown below.
+
+![Example of a PyBGE output plot of forecast predicted energy usage, colour coded by expected temperature](https://github.com/Stargrazer82301/PyBGE/blob/main/BGE_Forecast_Daily.png)
+
+![Example of a PyBGE output plot of daily expected average temperature vs predicted energy usage](https://github.com/Stargrazer82301/PyBGE/blob/main/BGE_Forecast_TempVsUsage.png)
