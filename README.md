@@ -4,7 +4,7 @@ A small Python package to scrape, parse, and tabulate your hourly energy usage d
 
 ## Introduction
 
-I made this code as a little personal project, because we had done some energy efficiency upgrades to our house, and I wanted to understand how much of an impact these were having on our bills. The BGE  account website provides very useful hour-by-hour usage plots for electricity and gas. Cool! However, they don't provide a way to download that usage data in bulk.
+I made this code as a little personal project, because we had done some energy efficiency upgrades to our house, and I wanted to understand how much of an impact these were having on our bills. The BGE account website provides very useful hour-by-hour usage plots for electricity and gas. Cool! However, they don't provide a way to download that usage data in bulk.
 
 PyBGE gets around this problem by logging into the BGE website on your behalf, navigating to the hourly usage plot for a given day, *screenshotting* that plot, parsing the screenshot to extract your hour-by-hour energy usage, and then repeating that process for every day within a date range you define.PyBGE then tabulates all of this usage data, and cross-references it with publicly available weather data (via the Meteostat service).
 
@@ -17,7 +17,7 @@ Secondly, PyBGE can combine weather forecasts and historical weather data (again
 ## Requirements
 
 * Python >=3.11
-* [Google Chrome](https://www.google.com/chrome/) and a matching  [ChromeDriver](https://chromedriver.chromium.org/) in `PATH`. Iif you have Chrome installed on your computer, you probably satisfy this requirement.
+* [Google Chrome](https://www.google.com/chrome/) and a matching  [ChromeDriver](https://chromedriver.chromium.org/) in `PATH`. If you have Chrome installed on your computer, you probably satisfy this requirement.
 * The [Tesseract](https://github.com/tesseract-ocr/tesseract) open-source OCR (Optical Character Recognition) library. When running PyBGE, you will need to provide the path to the tesseract executable (see Quick Star section below).
 
 ## Installation
@@ -79,7 +79,7 @@ On first run of `pybge.run()` the output directory must exist, but can be empty 
 
 ## `pybge.run()` Usage
 
-The docstring for `pybge.run()` contains full explaination of the input parameters; they are summarised here for cenvenience:
+The docstring for `pybge.run()` contains full explanation of the input parameters; they are summarised here for convenience:
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
@@ -94,14 +94,16 @@ The docstring for `pybge.run()` contains full explaination of the input paramete
 | `date_start` | `datetime.date \| None` | `None` | Earliest date to process; auto-detected from existing data when `None` (auto-detect does not work for first run) |
 | `date_end` | `datetime.date \| None` | `None` | Latest date to process; defaults to three days before current date |
 | `dollars_per_kwhr` | `str` | `None` | Electricity cost per kWh |
-| `dollars_per_therm` | `str` | `None` | Sub-directory inside `path` for PNG screenshots |
+| `dollars_per_therm` | `str` | `None` | Electricity cost per therm |
 | `freedom_units` | `bool` | `False` | Sub-directory inside `path` for PNG screenshots |
 
-Latitude, longitute, and altitude default values for weather lookup correspond approxmately to the Royal Farms headquarters. This seemed an appropriately *Baltimore*  default location. If you want more-accurate weather for the specific location of your address, you can find the latitude and longitude by, eg, right-clicking on a locaiton on Google maps.
+Note that `pybge.run()` can take a while to run. When navigating the javascript-heavy BGE website, it needs to take enough time to all the necessary page elements to load. During the scraping phase, it can therefore take several seconds per day.
+
+Latitude, longitude, and altitude default values for weather lookup correspond approximately to the Royal Farms headquarters. This seemed an appropriately *Baltimore*  default location. If you want more-accurate weather for the specific location of your address, you can find the latitude and longitude by, eg, right-clicking on a location on Google maps.
 
 If tesseract is in your path, you don't have to provide a value for the `tesseract_cmd` kwarg. Otherwise, typing `which tesseract` at the terminal (on UNIX systems) will tell you the path to your tesseract installation.
 
-The output data files record the energy usage for your electricity usage in kWh, and gas usage in therms. They also record your combined usage in units of "equivalent kilowatt-hours", or ekWh, by using the approximate equivalency between 
+The output data files record the energy usage for your electricity usage in kWh, and gas usage in therms. They also record your combined usage in units of "equivalent kilowatt-hours", or ekWh. If the user provides values for dollars_per_kwhr and dollars_per_therm, then ekWh is calculated using the relationship between those values, to get the cost-equivalent total. Otherwise, a roughly-representative conversion factor of 9.3 is applied.
 
 The service agreement UUID is BGE's internal identifier for your account. It is embedded in the URL of your hourly usage page and tells the BGE website which meter/address to show data for. How to find yours:
 
@@ -147,22 +149,35 @@ The service agreement UUID is BGE's internal identifier for your account. It is 
 
 ## `pybge.correlate()` Usage
 
-`pybge.correlate()` uses the tabulated outputs of `pybge.run`, and applies one of several possible machine learning models (mostly from `scikit-learn`) to understand the underyling relationship between weather conditions and energy usage. A certain number of the most recent days can be excluded from this modelling, to see if they deviate from the historical relationship.
+`pybge.correlate()` uses the tabulated outputs of `pybge.run`, and applies one of several possible machine learning models (mostly from `scikit-learn`) to understand the underlying relationship between weather conditions and energy usage. A certain number of the most recent days can be excluded from this modelling, to see if they deviate from the historical relationship.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `data_dir` | `str` | — | Directory where PyBGE CSV files are stored |
 | `method` | `str` | `"GPR"` | Method to use to for modelling usage vs weather (`"GPR"`, `"linear"`, `"BRR"`, `"ARDR"`, `"Random-Forest"`, `"Quantile-Forest"`, `"Neural-Net"`) |
 | `predict_days` | `int` | `30` | How many days into the past to predict (for comparing to model) |
-| `dollars_per_kwhr` | `float` | `None` | None | Directory where CSV files are stored |
-| `dollars_per_therm` | `float` | `None` | None| Directory where CSV files are stored |
+| `dollars_per_kwhr` | `float \| None` | None | Directory where CSV files are stored |
+| `dollars_per_therm` | `float \| None` | None | Directory where CSV files are stored |
 | `plot_unit` | `str` | `"auto"` | `"ekwh"`, `"dollars"`, or `"auto"` |
 | `freedom_units` | `bool` | `False` | Change temperature units in plots fron Censius to Farenheit |
 
+If `dollars_per_kwhr` and `dollars_per_therm` are supplied, then `plot_unit = "auto"` defaults to dollars; otherwise, it defaults to ekWh. If `plot_unit` is set to `"auto"`, then values for `dollars_per_kwhr` and `dollars_per_therm` must be supplied.
+
 ## `pybge.forecast()` Usage
+
+`pybge.forecast()` retrieves the actual forecast for the next week, and then combines that with historical weather data, as inputs to the model trained in `pybge.correlate()`, to predict your energy usage over the given number of days into the future. 
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `path` | `str` | — | Directory where CSV files are stored |
+| `data_dir` | `str` | — | Directory where PyBGE CSV files are stored |
+| `lat` | `float` | `39.3328` | Latitude (degrees) for Meteostat weather lookup |
+| `lon` | `float` | `-76.6327` | Longitude (degrees) for Meteostat weather lookup |
+| `alt` | `float` | `68` | Altitude (metres) for Meteostat weather lookup |
+| `forecast_days` | `int` | `30` | Directory where CSV files are stored |
+| `freedom_units` | `bool` | `False` | Change temperature units in plots fron Censius to Farenheit |
+
+`pybge.forecast()` inherits whatever units were used by `pybge.correlate()`, dollars or ekWh.
+
+Weather forecast is used for the first 0–5 days into the future; forecast data then tapers with historical weather data over days 5–7; any date more than 7 days in the future is entirely informed by historical weather averages.
 
 
