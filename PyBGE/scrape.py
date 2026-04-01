@@ -23,7 +23,9 @@ import selenium.webdriver.common.action_chains
 import selenium.webdriver.common.by
 import selenium.webdriver.support.ui
 import selenium.webdriver.support.expected_conditions
-import undetected_chromedriver as uc
+import sys
+if sys.platform != "win32":
+    import undetected_chromedriver as uc
 
 from .utils import time_est, configure_tesseract
 
@@ -180,39 +182,39 @@ def scrape(
     # ------------------------------------------------------------------ #
     # Start Selenium -- identical to original script
     # ------------------------------------------------------------------ #
-    # Use undetected_chromedriver to bypass BGE's bot detection, which
-    # blocks standard headless Chrome on newer Chrome versions.
-    options = uc.ChromeOptions()
-    options.add_argument("--headless")
+    # On Windows, standard Selenium works fine. On Mac/Linux, use
+    # undetected_chromedriver to bypass BGE's headless Chrome bot detection.
+    import subprocess, re
+    if sys.platform == "win32":
+        options = selenium.webdriver.chrome.options.Options()
+        options.add_argument("--headless")
+        driver = selenium.webdriver.Chrome(options=options)
+    else:
+        options = uc.ChromeOptions()
+        options.add_argument("--headless")
 
-    # Auto-detect the installed Chrome major version so ChromeDriver always
-    # matches, even after Chrome auto-updates.
-    import subprocess, re, sys
-    chrome_version = None
-    try:
-        if sys.platform == "darwin":
-            result = subprocess.run(
-                ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "--version"],
-                capture_output=True, text=True
-            )
-        elif sys.platform == "win32":
-            result = subprocess.run(
-                ["reg", "query", "HKLM\\SOFTWARE\\Google\\Chrome\\BLBeacon", "/v", "version"],
-                capture_output=True, text=True
-            )
-        else:
-            result = subprocess.run(
-                ["google-chrome", "--version"],
-                capture_output=True, text=True
-            )
-        match = re.search(r"(\d+)\.\d+\.\d+\.\d+", result.stdout + result.stderr)
-        if match:
-            chrome_version = int(match.group(1))
-            print(f"Detected Chrome version: {chrome_version}")
-    except Exception as e:
-        print(f"Could not auto-detect Chrome version ({e}); letting undetected_chromedriver decide")
+        # Auto-detect Chrome major version so ChromeDriver always matches
+        chrome_version = None
+        try:
+            if sys.platform == "darwin":
+                result = subprocess.run(
+                    ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "--version"],
+                    capture_output=True, text=True
+                )
+            else:
+                result = subprocess.run(
+                    ["google-chrome", "--version"],
+                    capture_output=True, text=True
+                )
+            match = re.search(r"(\d+)\.\d+\.\d+\.\d+", result.stdout + result.stderr)
+            if match:
+                chrome_version = int(match.group(1))
+                print(f"Detected Chrome version: {chrome_version}")
+        except Exception as e:
+            print(f"Could not auto-detect Chrome version ({e}); letting undetected_chromedriver decide")
 
-    driver = uc.Chrome(options=options, version_main=chrome_version)
+        driver = uc.Chrome(options=options, version_main=chrome_version)
+
     driver.set_window_size(1440, 1600)
 
     # ------------------------------------------------------------------ #
@@ -272,7 +274,6 @@ def scrape(
         date_string = date.strftime("%Y-%m-%d")
 
         for fuel in fuels:
-            print(f"{date_string} {fuel}")
 
             try:
                 driver.get(_usage_url(fuel, date_string, service_agreement_uuid))
