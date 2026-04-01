@@ -197,3 +197,9 @@ Weather forecast is used for the first 0–5 days into the future; forecast data
 ![Example of a PyBGE output plot of forecast predicted energy usage, colour coded by expected temperature](https://github.com/Stargrazer82301/PyBGE/blob/main/BGE_Forecast_Daily.png)
 
 ![Example of a PyBGE output plot of daily expected average temperature vs predicted energy usage](https://github.com/Stargrazer82301/PyBGE/blob/main/BGE_Forecast_TempVsUsage.png)
+
+## Final Remarks
+
+This code is provided in the hope (although maybe not expectation) that it will be useful to you.
+
+I can't promise to fix any issues that are raised. But feel free to submit a pull request!
