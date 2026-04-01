@@ -24,7 +24,13 @@ Secondly, PyBGE can combine weather forecasts and historical weather data (again
 
 ## Installation
 
-Install by downloading this repository, navigating in the terminal to the directory that contains `pyproject.toml`, then running the command:
+PyBGE can be installed directly from GitHub via `pip` by using the comamnd:
+
+```
+pip install git+https://github.com/Stargrazer82301/PyBGE
+```
+
+Else, you can install it by downloading this repository, navigating in the terminal to the directory that contains `pyproject.toml`, then running the command:
 
 ```
 pip install .
