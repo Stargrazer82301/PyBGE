@@ -302,7 +302,7 @@ def parse(
             pct = 100.0 * (d + 1) / len(date_list)
             print(
                 f"\rParsing {date_string}; {pct:.1f}% complete; "
-                f"estimated completion {est}",
+                f"estimate complete {est}",
                 end="",
             )
 
