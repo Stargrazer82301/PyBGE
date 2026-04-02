@@ -41,6 +41,7 @@ def _login(driver: selenium.webdriver.Chrome, username: str, password: str, img_
     Wait = selenium.webdriver.support.ui.WebDriverWait
 
     # Navigate to login page
+    print('Initiating login process; if no progress appears in 5 minutes, press return')
     time.sleep(10)
     driver.get("https://secure.bge.com/accounts/login")
     time.sleep(20)
@@ -59,7 +60,7 @@ def _login(driver: selenium.webdriver.Chrome, username: str, password: str, img_
 
     # Check for MFA prompt -- identical logic to original script
     code_box_search = driver.find_elements(By.ID, "emailVerificationCode")
-    if len(code_box_search) == 1:
+    if len(code_box_search) == 1:        
         code_box = code_box_search[0]
         continue_button = driver.find_element(By.ID, "continueButton")
         mfa_code = input("Please provide two-factor authentication code: ")
