@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pybge"
-version = "0.2.0"
+version = "1.0.0"
 description = "Scrape, parse, collate, correlate and forecast BGE hourly energy-usage data."
 readme = "README.md"
 requires-python = ">=3.10"
