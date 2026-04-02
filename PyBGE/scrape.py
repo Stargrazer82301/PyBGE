@@ -70,6 +70,9 @@ def _login(driver: selenium.webdriver.Chrome, username: str, password: str, img_
         continue_button.click()
         time.sleep(20)
     print("Loaded " + driver.current_url)
+    if 'secure.bge.com/accounts/dashboard' not in driver.current_url:
+        driver.save_screenshot(os.path.join(img_dir, 'debug_screenshot.png'))
+        raise Exception('BGE login page not as expected; debug screenshot output to file')
 
 
 def _usage_url(fuel: str, date_string: str, service_agreement_uuid: str) -> str:
