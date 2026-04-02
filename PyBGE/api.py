@@ -206,9 +206,9 @@ def correlate(
 
 def forecast(
     data_dir: str,
-    *,
-    lat: float = 39.33125,
-    lon: float = -76.63248,
+    lat: float,
+    lon: float,
+    *,    
     alt: float = 69,
     forecast_days: int = 30,
     freedom_units: bool = False,
