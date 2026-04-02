@@ -222,9 +222,9 @@ def forecast(
         ``BGE_Regressor.hkl`` (produced by ``pybge.run()`` and
         ``pybge.correlate()``).  All outputs are also written here.
     lat:
-        Latitude of the property.  Defaults to 39.33125.
+        Latitude of the property in degrees.
     lon:
-        Longitude of the property.  Defaults to -76.63248.
+        Longitude of the property in degrees.
     alt:
         Altitude of the property in metres.  Defaults to 69.
     forecast_days:
