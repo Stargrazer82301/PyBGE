@@ -170,11 +170,9 @@ def forecast(
 
     if not os.path.exists(met_hourly_path):
         print("Querying historical weather via Meteostat (one-time download)...")
-        # Fetch up to 3 years of history for climatological averaging.
-        # Meteostat blocks hourly requests longer than 3 years by default,
-        # and 3 years is more than sufficient for reliable monthly averages.
-        hist_start = datetime.datetime.now() - datetime.timedelta(days=4*360)
-        hist_end = datetime.datetime.now() - datetime.timedelta(days=365)
+        # Fetch 10 years of history for climatological averaging.
+        hist_start = datetime.datetime.now() - datetime.timedelta(days=11*365)
+        hist_end = datetime.datetime.now() - datetime.timedelta(days=366)
         meteostat.config.block_large_requests = False
         meteostat.config.cache_enable = False
         met_params = [
