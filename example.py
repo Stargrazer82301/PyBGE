@@ -2,11 +2,11 @@
 import pybge
 import datetime
 
-# Provide the path to where tesseract is installed on your system (or None if tesseract in PATH)
-tesseract_cmd = '/opt/homebrew/bin/tesseract'
-
 # State name of directory to hold all the outputs PyBGE will produce
 output_dir = 'PyBGE_Output'
+
+# Provide the path to where tesseract is installed on your system (or None if tesseract in PATH)
+tesseract_cmd = '/opt/homebrew/bin/tesseract'
 
 # Main PyBGE call, which will scrape, parse tabulate, and collate usage data
 pybge.run(output_dir,
