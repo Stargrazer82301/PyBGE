@@ -103,7 +103,7 @@ The docstring for `pybge.run()` contains full explanation of the input parameter
 | `date_end` | `datetime.date \| None` | `None` | Latest date to process; defaults to three days before current date |
 | `dollars_per_kwhr` | `str` | `None` | Electricity cost per kWh |
 | `dollars_per_therm` | `str` | `None` | Electricity cost per therm |
-| `freedom_units` | `bool` | `False` | Sub-directory inside `path` for PNG screenshots |
+| `freedom_units` | `bool` | `False` | Change temperature units in plots fron Censius to Farenheit |
 
 Note that `pybge.run()` can take a while to run. When navigating the javascript-heavy BGE website, it needs to take enough time to all the necessary page elements to load. This involes about a minute of overheads during the initual logi process. And during the scraping phase, it can take several seconds per day of data.
 
