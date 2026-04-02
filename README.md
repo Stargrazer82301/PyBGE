@@ -105,7 +105,7 @@ The docstring for `pybge.run()` contains full explanation of the input parameter
 | `dollars_per_therm` | `str` | `None` | Electricity cost per therm |
 | `freedom_units` | `bool` | `False` | Sub-directory inside `path` for PNG screenshots |
 
-Note that `pybge.run()` can take a while to run. When navigating the javascript-heavy BGE website, it needs to take enough time to all the necessary page elements to load. During the scraping phase, it can therefore take several seconds per day.
+Note that `pybge.run()` can take a while to run. When navigating the javascript-heavy BGE website, it needs to take enough time to all the necessary page elements to load. This involes about a minute of overheads during the initual logi process. And during the scraping phase, it can take several seconds per day of data.
 
 Latitude, longitude, and altitude default values for weather lookup correspond approximately to the Royal Farms headquarters. This seemed an appropriately *Baltimore*  default location. If you want more-accurate weather for the specific location of your address, you can find the latitude and longitude by, eg, right-clicking on a location on Google maps.
 
