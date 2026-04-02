@@ -232,8 +232,16 @@ def forecast(
     # ------------------------------------------------------------------ #
     hourly_obj = HourlyForecast()
     options    = openmeteopy.options.ForecastOptions(lat, lon)
-    openmet_query = openmeteopy.OpenMeteo(options, hourly_obj.temperature_2m())
+    openmet_params = [hourly_obj.temperature_2m(),
+                      hourly_obj.relativehumidity_2m(),
+                      hourly_obj.precipitation(),
+                      hourly_obj.windspeed_10m(),
+                      hourly_obj.winddirection_10m(),
+                      hourly_obj.pressure_msl(),
+                      hourly_obj.cloudcover()]
+    openmet_query = openmeteopy.OpenMeteo(options, openmet_params[0])
     openmet_forecast = openmet_query.get_pandas()
+
     openmet_forecast["date"] = pd.to_datetime(
         openmet_forecast.index, format="%Y-%m-%dT%H:%M"
     )
@@ -243,7 +251,7 @@ def forecast(
 
     for h in forecast_hourly.index:
         f = openmet_forecast.index[
-            np.where(forecast_hourly.loc[h, "date"] == openmet_forecast["date"])
+            np.where(forecast_hourly.loc[h, "date"] == openmet_forecast["date"])[0]
         ]
         if len(f) == 0:
             continue
