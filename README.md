@@ -12,7 +12,7 @@ PyBGE gets around this problem by logging into the BGE website on your behalf, n
 
 PyBGE also provides functionality to let you use this data for some analysis!
 
-Firstly, PyBGE can apply a range of (fairly basic) machine learning models to the usage and weather data, to train a model to predict your usage based on conditions. You can define training versus comparison date ranges, to see if your more recent usage is different from what the model would predict based on your past usage patterns. This allowed me to figure out how much my energy improvements were saving from my bills!
+Firstly, PyBGE can apply a range of (fairly basic) machine learning models to the usage and weather data, to train a model to predict your usage based on conditions. You can define training versus comparison date ranges, to see if your more recent usage is different from what the model would predict based on your past usage patterns. This is especially useful if you are using multiple years worth of data, allowing year-to-year comparisons. This allowed me to figure out how much my energy improvements were saving from my bills!
 
 Secondly, PyBGE can combine weather forecasts and historical weather data (again using Metostat), to use its model of your usage to predict how much energy you are likely to use in the near future (I personally find this more accurate than BGE's own estimate of what my usage will be over a given billing period).
 
@@ -48,7 +48,7 @@ I wrote PyBGE myself; however it was very much tailored to my own setup. I there
 
 ## Quick Start
 
-Here is example code that illustrates a standard run of PyBGE. This code can also be found in the script `example.py` in the repository.
+Here is example code that illustrates a standard run of PyBGE. This code can also be found in the script `example.py` in the repository. This example script should take about an hour to run to completion.
 
 ```
 # Imports
