@@ -49,7 +49,8 @@ def _login(driver: selenium.webdriver.Chrome, username: str, password: str, img_
         password_box = driver.find_element(By.ID, "password")
         login_button = driver.find_element(By.ID, "next")
     except:
-        breakpoint()
+        driver.save_screenshot(os.path.join(img_dir, 'debug_screenshot.png'))
+        raise Exception('BGE login page not as expected; debug screenshot output to file')
 
     username_box.send_keys(username)
     password_box.send_keys(password)
