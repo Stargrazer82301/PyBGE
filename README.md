@@ -194,7 +194,7 @@ The second analysis plot illustrates the result of the model fitting. It shows t
 
 `pybge.forecast()` inherits whatever units were used by `pybge.correlate()`, dollars or ekWh.
 
-Weather forecast is used for the first 0–5 days into the future; forecast data then tapers with historical weather data over days 5–7; any date more than 7 days in the future is entirely informed by historical weather averages. The historical averages draw on 10 years of data, so there can be a bit of 'chop' in the day-to-day predictions (especially during spring & autumn).
+Weather forecast is used for the first 0–5 days into the future; forecast data then tapers with historical weather data over days 5–7; any date more than 7 days in the future is entirely informed by historical weather averages. The historical averages draw on 10 years of data, so there can be a bit of "chop" in the day-to-day predictions (especially during spring & autumn).
 
 ### Forecast Plots
 
