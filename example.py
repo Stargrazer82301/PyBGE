@@ -13,8 +13,8 @@ pybge.run(output_dir,
           'satisfied_bge_customer@bmail.com',           # Change to your BGE account email
           'hax0rpa$$wurd',                              # Change to your BGE account passowrd
           '3D2c3beab5-0b88-22eu-918c-0300170a5887',     # Change to your BGE account UUID (see readme)
-          date_start = datetime.date(2025, 12, 1),
-          date_end = datetime.date(2026, 3, 20),
+          date_start = datetime.date(2025, 11, 1),
+          date_end = datetime.date(2026, 3, 30),
           tesseract_cmd = tesseract_cmd)
 
 # Function to train model to learn usage patterns based on weather
