@@ -18,7 +18,7 @@ pybge.run(output_dir,
           tesseract_cmd = tesseract_cmd)
 
 # Function to train model to learn usage patterns based on weather
-pybge.correlate('output_dir',
+pybge.correlate(output_dir,
                 predict_days = 120)
 
 # Function to use the model trained above, and forecasts, to predict usage
